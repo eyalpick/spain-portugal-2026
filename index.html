@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -425,6 +425,15 @@
 
         .critical-booking-card ul { margin-right: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
         .critical-booking-card a { color: #93c5fd; text-decoration: underline; font-weight: 600; }
+        .task-item { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.5rem 0; cursor: pointer; transition: opacity 0.3s ease; }
+        .task-item:hover { opacity: 0.85; }
+        .task-item.done { opacity: 0.5; }
+        .task-item.done .task-label { text-decoration: line-through; }
+        .task-checkbox { flex-shrink: 0; width: 20px; height: 20px; border: 2px solid rgba(239, 68, 68, 0.5); border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-top: 2px; transition: all 0.2s ease; background: transparent; }
+        .task-item.done .task-checkbox { background: rgba(34, 197, 94, 0.25); border-color: rgba(34, 197, 94, 0.7); }
+        .task-checkbox i { font-size: 0.7rem; color: #22c55e; opacity: 0; transition: opacity 0.2s ease; }
+        .task-item.done .task-checkbox i { opacity: 1; }
+        .task-label { flex: 1; }
 
         .maps-pin-note {
             background: rgba(59, 130, 246, 0.1);
@@ -931,18 +940,10 @@
                         <h2 class="card-title"><i class="fa-solid fa-route"></i> המסלול המלא – עדכון פורטוגל</h2>
                     </div>
                     <div class="card-body">
-                        <div class="critical-booking-card">
-                            <h3><i class="fa-solid fa-triangle-exclamation"></i> כרטיסים קריטיים להזמנה מראש!</h3>
+                        <div class="critical-booking-card" id="pretrip-tasks">
+                            <h3><i class="fa-solid fa-triangle-exclamation"></i> משימות לפני הנסיעה — סמנו כשבוצע!</h3>
                             <p>חובה להזמין מראש כדי להבטיח מקום ולהימנע מתורים ארוכים:</p>
-                            <ul style="margin-top:0.6rem;">
-                                <li><strong>אחוזת רגאליירה (Sintra)</strong> – חובה להזמין כרטיס מראש ליום 05/07 שעה 09:30. <a href="https://regaleira.byblueticket.pt/" target="_blank">להזמנה אונליין</a></li>
-                                <li><strong>מנזר הצלוב בטומאר (Tomar)</strong> – מומלץ להזמין כרטיס מראש ליום 04/07. <a href="https://www.conventodecristo.gov.pt/" target="_blank">אתר המנזר</a></li>
-                                <li><strong>מנזר בטאליה (Batalha)</strong> – מומלץ להזמין מראש ליום 04/07. <a href="https://www.mosteirobatalha.gov.pt/" target="_blank">אתר המנזר</a></li>
-                                <li><strong>מנזר ז'רונימוש (Lisbon)</strong> – בלם עמוס מאוד בקיץ. הזמינו כרטיסים מראש. <a href="https://www.patrimoniocultural.gov.pt/en/museus-e-monumentos/dgpc/m/mosteiro-dos-jeronimos/" target="_blank">להזמנה אונליין</a></li>
-                                <li><strong>מרתפי יין בוילה נובה דה גאיה (Porto)</strong> – מומלץ להזמין סיור + טעימה מראש בקיץ. <a href="https://www.taylors.pt/en/visit-us/" target="_blank">Taylor's</a> | <a href="https://www.grahams-port.com/en/visit" target="_blank">Graham's</a></li>
-                                <li><strong>סיור ביקב בדואורו</strong> – רוב היקבים דורשים הזמנה מראש בקיץ. Quinta do Bomfim / Quinta do Crasto.</li>
-                                <li><strong>טברנה Quarta-Feira (Évora)</strong> – חובה להזמין מקום מראש — המסעדה קטנה ומלאה. <a href="https://www.tripadvisor.pt/Restaurant_Review-g189143-d1226997-Reviews-Taberna_Tipica_Quarta_Feira-Evora_Evora_District_Alentejo.html" target="_blank">ביקורות בטריפ-אדוייזר</a></li>
-                            </ul>
+                            <div id="task-list" style="margin-top:0.8rem; display:flex; flex-direction:column; gap:0.2rem;"></div>
                         </div>
                         
                         <div class="maps-pin-note">
@@ -1423,7 +1424,7 @@
                 lodging: {
                     nameHe: "צ'ינצ'ון (Condesa de Chinchón)",
                     nameEn: "Condesa de Chinchón",
-                    desc: "מלון כפרי קסום במרחק נסיעה קצרה ממדריד. הערות: יש מזגן. חניה חינם (ברחוב).",
+                    desc: "מלון כפרי קסום במרחק נסיעה קצרה ממדריד. הערות: יש מזגן. מחיר 280 אירו. חניה: במלון ב-10 אירו ליום.",
                     bookingUrl: "",
                     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Condesa+de+Chinchon"
                 },
@@ -1431,7 +1432,7 @@
                 eatsDesc: "מסעדה מסורתית הממוקמת בתוך מרתף יין עתיק. חווית סיום מושלמת לטיול.",
                 eatsMapUrl: "https://www.google.com/maps/search/?api=1&query=Meson+Cuevas+del+Vino+Chinchon",
                 eatsWebUrl: "https://cuevasdelvino.com/en/",
-                parkingTip: "בצ'ינצ'ון: חנו ברחובות הסמוכים למלון בחינם (לפי המלצת המלון).",
+                parkingTip: "בצ'ינצ'ון: חנו בחניון של המלון ב-10 אירו ליום.",
                 parkingMapUrl: "https://www.google.com/maps/search/?api=1&query=Condesa+de+Chinchon",
                 activities: [
                     {
@@ -1696,6 +1697,43 @@
         btnCloseToll.addEventListener("click", () => { tollModal.classList.remove("active"); });
         tollModal.addEventListener("click", (e) => { if (e.target === tollModal) tollModal.classList.remove("active"); });
 
+        const pretripTasks = [
+            { id: "regaleira", text: '<strong>אחוזת רגאליירה (Sintra)</strong> – כרטיס מראש ליום 05/07 שעה 09:30. <a href="https://regaleira.byblueticket.pt/" target="_blank">להזמנה אונליין</a>' },
+            { id: "tomar", text: '<strong>מנזר הצלוב בטומאר (Tomar)</strong> – מומלץ להזמין כרטיס מראש ליום 04/07. <a href="https://www.conventodecristo.gov.pt/" target="_blank">אתר המנזר</a>' },
+            { id: "batalha", text: '<strong>מנזר בטאליה (Batalha)</strong> – מומלץ להזמין מראש ליום 04/07. <a href="https://www.mosteirobatalha.gov.pt/" target="_blank">אתר המנזר</a>' },
+            { id: "jeronimos", text: '<strong>מנזר ז\'רונימוש (Lisbon)</strong> – כרטיסים מראש. בלם עמוס מאוד בקיץ. <a href="https://www.patrimoniocultural.gov.pt/en/museus-e-monumentos/dgpc/m/mosteiro-dos-jeronimos/" target="_blank">להזמנה אונליין</a>' },
+            { id: "taylors", text: '<strong>מרתפי יין בוילה נובה דה גאיה (Porto)</strong> – מומלץ להזמין סיור וטעימה מראש בקיץ. <a href="https://www.taylors.pt/en/visit-us/" target="_blank">Taylor\'s</a> | <a href="https://www.grahams-port.com/en/visit" target="_blank">Graham\'s</a>' },
+            { id: "douro_winery", text: '<strong>סיור ביקב בדואורו</strong> – רוב היקבים דורשים הזמנה מראש בקיץ. Quinta do Bomfim / Quinta do Crasto.' },
+            { id: "evora_rest", text: '<strong>טברנה Quarta-Feira (Évora)</strong> – חובה להזמין מקום מראש — קטנה ומלאה. <a href="https://www.tripadvisor.pt/Restaurant_Review-g189143-d1226997-Reviews-Taberna_Tipica_Quarta_Feira-Evora_Evora_District_Alentejo.html" target="_blank">ביקורות בטריפ-אדוייזר</a>' },
+            { id: "cancel_lamego", text: '<strong>ביטול הזמנה: Casinha da Ti\'Augusta</strong> — (הייתה ב-30/06 בלמגו)' },
+            { id: "cancel_lisbon", text: '<strong>ביטול הזמנה: EXE Liberdade</strong> — (הזמנה כפולה בליסבון ב-05/07)' }
+        ];
+
+        let taskStates = JSON.parse(localStorage.getItem("spain_portugal_tasks")) || {};
+
+        function renderTasks() {
+            const container = document.getElementById("task-list");
+            if (!container) return;
+            container.innerHTML = "";
+            pretripTasks.forEach(task => {
+                const isDone = taskStates[task.id] === true;
+                const el = document.createElement("div");
+                el.className = "task-item " + (isDone ? "done" : "");
+                el.innerHTML = `
+                    <div class="task-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="task-label">` + task.text + `</div>
+                `;
+                el.addEventListener("click", (e) => {
+                    if (e.target.tagName === "A") return;
+                    taskStates[task.id] = !taskStates[task.id];
+                    localStorage.setItem("spain_portugal_tasks", JSON.stringify(taskStates));
+                    renderTasks();
+                });
+                container.appendChild(el);
+            });
+        }
+
+        renderTasks();
         renderItinerary();
 
     </script>
